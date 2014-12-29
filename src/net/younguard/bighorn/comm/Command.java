@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 
 import net.younguard.bighorn.comm.tlv.TlvObject;
 
+import org.apache.mina.core.session.IoSession;
+
 public interface Command
 {
 	public TlvObject encode()

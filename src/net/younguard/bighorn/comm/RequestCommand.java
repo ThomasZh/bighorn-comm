@@ -6,6 +6,8 @@ import net.younguard.bighorn.comm.tlv.ByteUtil;
 import net.younguard.bighorn.comm.tlv.TlvObject;
 import net.younguard.bighorn.comm.tlv.TlvParser;
 
+import org.apache.mina.core.session.IoSession;
+
 public abstract class RequestCommand
 		implements Command
 {
