@@ -12,8 +12,6 @@ import net.younguard.bighorn.comm.tlv.TlvParser;
 
 import org.apache.mina.core.service.IoService;
 import org.apache.mina.core.session.IoSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class SentMsgReq
 		extends RequestCommand
@@ -30,8 +28,8 @@ public class SentMsgReq
 		tlv.add(tSequence);
 		tlv.add(tContent);
 
-		logger.debug("from command to tlv package:(tag=" + this.getTag() + ", child=" + i + ", length="
-				+ tlv.getLength() + ")");
+//		logger.debug("from command to tlv package:(tag=" + this.getTag() + ", child=" + i + ", length="
+//				+ tlv.getLength() + ")");
 		return tlv;
 	}
 
@@ -43,16 +41,16 @@ public class SentMsgReq
 
 		int childCount = 2;
 		TlvParser.decodeChildren(tlv, childCount);
-		logger.debug("from tlv:(tag=" + this.getTag() + ", child=" + childCount + ") to command");
+//		logger.debug("from tlv:(tag=" + this.getTag() + ", child=" + childCount + ") to command");
 
 		int i = 0;
 		TlvObject tSequence = tlv.getChild(i++);
 		this.setSequence(ByteUtil.byte2Short(tSequence.getValue()));
-		logger.debug("sequence: " + this.getSequence());
+//		logger.debug("sequence: " + this.getSequence());
 
 		TlvObject tContent = tlv.getChild(i++);
 		content = new String(tContent.getValue(), "UTF-8");
-		logger.debug("content: " + content);
+//		logger.debug("content: " + content);
 
 		return this;
 	}
@@ -70,14 +68,14 @@ public class SentMsgReq
 			IoSession ioSession = it.getValue();
 
 			if (sessionId == session.getId()) {
-				logger.debug("This is sender's session=[" + sessionId + "]");
+//				logger.debug("This is sender's session=[" + sessionId + "]");
 				continue; // don't send me again.
 			}
 
 			TlvObject sentMsgReq = BroadcastCommandParser.encode(this);
 
 			ioSession.write(sentMsgReq);
-			logger.debug("broadcast message=[" + this.getContent() + "] to session=[" + sessionId + "].");
+//			logger.debug("broadcast message=[" + this.getContent() + "] to session=[" + sessionId + "].");
 		}
 
 		SentMsgResp respCmd = new SentMsgResp(this.getSequence(), ErrorCode.SUCCESS);
@@ -117,6 +115,6 @@ public class SentMsgReq
 		this.content = content;
 	}
 
-	private final static Logger logger = LoggerFactory.getLogger(SentMsgReq.class);
+//	private final static Logger logger = LoggerFactory.getLogger(SentMsgReq.class);
 
 }

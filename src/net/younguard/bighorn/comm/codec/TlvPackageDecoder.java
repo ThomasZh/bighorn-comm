@@ -2,14 +2,13 @@ package net.younguard.bighorn.comm.codec;
 
 import java.io.UnsupportedEncodingException;
 
+import net.younguard.bighorn.comm.tlv.TlvByteUtilPrinter;
 import net.younguard.bighorn.comm.tlv.TlvObject;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TlvPackageDecoder
 		extends CumulativeProtocolDecoder
@@ -32,19 +31,29 @@ public class TlvPackageDecoder
 
 			short tag = in.getShort();
 			int length = in.getInt();
-			logger.debug("from ioBuffer to tlv:(tag=" + tag + ", length=" + length + ")");
+//			logger.debug("from ioBuffer to tlv:(tag=" + tag + ", length=" + length + ")");
 
 			// ???æ³?command tag
 			if (tag < 1000 || tag > 5100) {
-				logger.warn("Not define tag:" + tag);
-				// TlvByteUtilPrinter.hexDump("Not define tag:" + tag,
-				// in.array());
+//				logger.warn("Not define tag:" + tag);
+//				TlvByteUtilPrinter.hexDump("Not define tag:" + tag, in.array());
+				byte[] bytes = in.array();
+				int len = 200;
+				byte[] b = new byte[len];
+				if (bytes.length > 200)
+					len = 200;
+				else 
+					len = bytes.length;
+				for (int i=0;i<len;i++)
+					b[i]=bytes[i];
+				TlvByteUtilPrinter.hexDump("Not define tag:" + tag, b);
+				
 				throw new UnsupportedEncodingException("Not define tag:" + tag);
 			}
 
 			// ???æ³???¿åº¦
 			if (length < 0 || length > 65535) {
-				logger.warn("Package out of length:" + length);
+//				logger.warn("Package out of length:" + length);
 				// TlvByteUtilPrinter.hexDump("Package out of length:" + length,
 				// in.array());
 				throw new UnsupportedEncodingException("Package out of length:" + length);
@@ -75,6 +84,6 @@ public class TlvPackageDecoder
 		return false;// å¤??????????ï¼?è®©ç?¶ç±»è¿?è¡???¥æ?¶ä??ä¸?ï¿??
 	}
 
-	private final static Logger logger = LoggerFactory.getLogger(TlvPackageDecoder.class);
+//	private final static Logger logger = LoggerFactory.getLogger(TlvPackageDecoder.class);
 
 }

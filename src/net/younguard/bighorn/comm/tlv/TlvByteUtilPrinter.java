@@ -110,7 +110,7 @@ public class TlvByteUtilPrinter
 						ch = '.';
 					sb.append(ch);
 				}
-			System.out.print(sb.toString());
+			System.out.println(sb.toString());
 		}
 	}
 
