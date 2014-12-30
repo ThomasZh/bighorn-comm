@@ -8,7 +8,21 @@ import net.younguard.bighorn.comm.tlv.ByteUtil;
 import net.younguard.bighorn.comm.tlv.TlvObject;
 import net.younguard.bighorn.comm.tlv.TlvParser;
 
-public class SentMsgResp
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * this the the message response from server for ping request.
+ * 
+ * Copyright 2014 by Young Guard Salon Community, China. All rights reserved.
+ * http://www.younguard.net
+ * 
+ * NOTICE ! You can copy or redistribute this code freely, but you should not
+ * remove the information about the copyright notice and the author.
+ * 
+ * @author ThomasZhang, thomas.zh@qq.com
+ */
+public class MsgPangResp
 		extends ResponseCommand
 {
 	@Override
@@ -16,15 +30,15 @@ public class SentMsgResp
 			throws UnsupportedEncodingException
 	{
 		int i = 0;
-		TlvObject tSequence = new TlvObject(i++, ByteUtil.SHORT_LENGTH, ByteUtil.short2Byte(this.getSequence()));
+		TlvObject tSequence = new TlvObject(i++, ByteUtil.INTEGER_LENGTH, ByteUtil.int2Byte(this.getSequence()));
 		TlvObject tRespState = new TlvObject(i++, ByteUtil.SHORT_LENGTH, ByteUtil.short2Byte(this.getRespState()));
 
 		TlvObject tlv = new TlvObject(this.getTag());
 		tlv.add(tSequence);
 		tlv.add(tRespState);
 
-//		logger.debug("from command to tlv package:(tag=" + this.getTag() + ", child=" + i + ", length="
-//				+ tlv.getLength() + ")");
+		logger.debug("from command to tlv package:(tag=" + this.getTag() + ", child=" + i + ", length="
+				+ tlv.getLength() + ")");
 		return tlv;
 	}
 
@@ -36,41 +50,41 @@ public class SentMsgResp
 
 		int childCount = 2;
 		TlvParser.decodeChildren(tlv, childCount);
-//		logger.debug("from tlv:(tag=" + this.getTag() + ", child=" + childCount + ") to command");
+		logger.debug("from tlv:(tag=" + this.getTag() + ", child=" + childCount + ") to command");
 
 		int i = 0;
 		TlvObject tSequence = tlv.getChild(i++);
-		this.setSequence(ByteUtil.byte2Short(tSequence.getValue()));
-//		logger.debug("sequence: " + this.getSequence());
+		this.setSequence(ByteUtil.byte2Int(tSequence.getValue()));
+		logger.debug("sequence: " + this.getSequence());
 
 		TlvObject tRespState = tlv.getChild(i++);
 		this.setRespState(ByteUtil.byte2Short(tRespState.getValue()));
-//		logger.debug("respState: " + this.getRespState());
+		logger.debug("respState: " + this.getRespState());
 
 		return this;
 	}
 
 	// //////////////////////////////////////////////////////
 
-	public SentMsgResp()
+	public MsgPangResp()
 	{
-		this.setTag(CommandTag.SENT_MESSAGE_RESPONSE);
+		this.setTag(CommandTag.MESSAGE_PANG_RESPONSE);
 	}
 
-	public SentMsgResp(short sequence)
+	public MsgPangResp(int sequence)
 	{
 		this();
 
 		this.setSequence(sequence);
 	}
 
-	public SentMsgResp(short sequence, short state)
+	public MsgPangResp(int sequence, short state)
 	{
 		this(sequence);
 
 		this.setRespState(state);
 	}
 
-//	private final static Logger logger = LoggerFactory.getLogger(SentMsgResp.class);
+	private final static Logger logger = LoggerFactory.getLogger(MsgPangResp.class);
 
 }

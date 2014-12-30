@@ -8,6 +8,17 @@ import net.younguard.bighorn.comm.tlv.TlvParser;
 
 import org.apache.mina.core.session.IoSession;
 
+/**
+ * The father object of request command
+ * 
+ * Copyright 2014 by Young Guard Salon Community, China. All rights reserved.
+ * http://www.younguard.net
+ * 
+ * NOTICE ! You can copy or redistribute this code freely, but you should not
+ * remove the information about the copyright notice and the author.
+ * 
+ * @author ThomasZhang, thomas.zh@qq.com
+ */
 public abstract class RequestCommand
 		implements Command
 {
@@ -16,7 +27,7 @@ public abstract class RequestCommand
 			throws UnsupportedEncodingException
 	{
 		int i = 0;
-		TlvObject tSequence = new TlvObject(i++, ByteUtil.SHORT_LENGTH, ByteUtil.short2Byte(this.getSequence()));
+		TlvObject tSequence = new TlvObject(i++, ByteUtil.INTEGER_LENGTH, ByteUtil.int2Byte(this.getSequence()));
 
 		TlvObject tlv = new TlvObject(this.getTag());
 		tlv.add(tSequence);
@@ -34,7 +45,7 @@ public abstract class RequestCommand
 		TlvParser.decodeChildren(tlv, childCount);
 
 		TlvObject tSequence = tlv.getChild(0);
-		this.setSequence(ByteUtil.byte2Short(tSequence.getValue()));
+		this.setSequence(ByteUtil.byte2Int(tSequence.getValue()));
 
 		return this;
 	}
@@ -65,7 +76,7 @@ public abstract class RequestCommand
 	}
 
 	private short tag;
-	private short sequence;
+	private int sequence;
 
 	public short getTag()
 	{
@@ -77,12 +88,12 @@ public abstract class RequestCommand
 		this.tag = tag;
 	}
 
-	public short getSequence()
+	public int getSequence()
 	{
 		return sequence;
 	}
 
-	public void setSequence(short sequence)
+	public void setSequence(int sequence)
 	{
 		this.sequence = sequence;
 	}

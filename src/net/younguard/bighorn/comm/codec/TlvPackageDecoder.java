@@ -2,73 +2,71 @@ package net.younguard.bighorn.comm.codec;
 
 import java.io.UnsupportedEncodingException;
 
-import net.younguard.bighorn.comm.tlv.TlvByteUtilPrinter;
 import net.younguard.bighorn.comm.tlv.TlvObject;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * mina tlv package decoder
+ * 
+ * Copyright 2014 by Young Guard Salon Community, China. All rights reserved.
+ * http://www.younguard.net
+ * 
+ * NOTICE ! You can copy or redistribute this code freely, but you should not
+ * remove the information about the copyright notice and the author.
+ * 
+ * @author ThomasZhang, thomas.zh@qq.com
+ */
 public class TlvPackageDecoder
 		extends CumulativeProtocolDecoder
 {
 	/**
-	 * è¿?ä¸???¹æ?????è¿????ï¿??ï¿½æ???????¹ï¿½?
-	 * 1???å½????å®¹å??å¥½æ?¶ï??è¿????falseï¼??????¥ç?¶ç±»??¥æ?¶ä??ï¿????¹å??ï¿??
-	 * 2??????å®¹ä??å¤???¶ï¿½?è¦?ä¸?ï¿????¹å??è¿???¥ç?????å®¹ï??æ­¤æ?¶è?????falseï¼?è¿???·ç?¶ï¿½?
-	 * CumulativeProtocolDecoder
-	 * ä¼?å°????å®¹æ?¾è??IoSessionä¸?ï¼?ç­?ä¸?æ¬¡æ?¥æ?°æ?????å°±è????¨æ
-	 * ?¼è?????äº¤ç?????ç±»ç??doDecode
-	 * 3???å½????å®¹å????¶ï??è¿????trueï¼????ä¸ºé??è¦????å°?????
-	 * ?¹æ?°æ??è¿?è¡?è¯»å??ï¼???¶ç±»ä¼?å°???©ä???????°æ?????æ¬¡æ?¨é?????ç±»ç??doDecode
+	 * key point: 1. just enough data(length), return false, tell parent class
+	 * do next parser; 2ã€not enough data, return false, let's parent class call
+	 * CumulativeProtocolDecoder put message content into IoSession, waiting
+	 * next data, merge it, do next doDecode 3ã€more data, return true, parser
+	 * this data, do next parser used the remain data
 	 */
 	public boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out)
 			throws Exception
 	{
-		if (in.remaining() > 0) {// ?????°æ????¶ï??è¯»ï¿½?6å­??????¤æ??æ¶??????¿åº¦
-			in.mark();// ???è®°å?????ä½?ç½?ï¼?ä»¥ä¾¿reset
+		if (in.remaining() > 0) {// has data, read 6 bytes as message length
+			in.mark();// mark this place, for reset
 
 			short tag = in.getShort();
 			int length = in.getInt();
-//			logger.debug("from ioBuffer to tlv:(tag=" + tag + ", length=" + length + ")");
+			logger.debug("from ioBuffer to tlv:(tag=" + tag + ", length=" + length + ")");
 
-			// ???æ³?command tag
+			// unknown command tag
 			if (tag < 1000 || tag > 5100) {
-//				logger.warn("Not define tag:" + tag);
-//				TlvByteUtilPrinter.hexDump("Not define tag:" + tag, in.array());
-				byte[] bytes = in.array();
-				int len = 200;
-				byte[] b = new byte[len];
-				if (bytes.length > 200)
-					len = 200;
-				else 
-					len = bytes.length;
-				for (int i=0;i<len;i++)
-					b[i]=bytes[i];
-				TlvByteUtilPrinter.hexDump("Not define tag:" + tag, b);
-				
+				String hexDump = in.getHexDump(200);
+				logger.warn("Not define tag:" + tag, hexDump);
+
 				throw new UnsupportedEncodingException("Not define tag:" + tag);
 			}
 
-			// ???æ³???¿åº¦
+			// unknown command length
 			if (length < 0 || length > 65535) {
-//				logger.warn("Package out of length:" + length);
-				// TlvByteUtilPrinter.hexDump("Package out of length:" + length,
-				// in.array());
+				String hexDump = in.getHexDump(200);
+				logger.warn("Package out of length:" + length, hexDump);
+
 				throw new UnsupportedEncodingException("Package out of length:" + length);
 			}
 
-			// å¦????æ¶???????å®¹ç????¿åº¦ä¸?å¤??????´æ?¥è?????true
-			if (length > in.remaining()) {// å¦????æ¶???????å®¹ä??å¤?ï¼???????ç½?ï¼???¸å??äº?ä¸?è¯»å??size
+			// not enough length, return true
+			if (length > in.remaining()) {// length is not enough, reset, not
+											// read size
 				in.reset();
-				return false;// ??¥æ?¶æ?°æ?°æ??ï¼?ä»¥æ?¼å?????å®???´æ?°æ??
+				return false;// receive new data, merge to completed data
 			} else {
 				TlvObject pkg = new TlvObject();
 				byte[] body = new byte[length];
 				in.get(body, 0, length);
-				// TlvByteUtilPrinter.hexDump("ioBuffer payload: ", body,
-				// length);
 
 				pkg.setTag(tag);
 				pkg.setLength(length);
@@ -76,14 +74,15 @@ public class TlvPackageDecoder
 
 				out.write(pkg);
 
-				if (in.remaining() > 0) {// å¦????è¯»å?????å®¹å??è¿?ç²?äº????ï¼?å°±è?©ç?¶ç±»???ç»?ä¿ºä??æ¬¡ï??è¿?è¡?ä¸?ä¸?æ¬¡è§£ï¿??
+				if (in.remaining() > 0) {// has more data, let's parser next
+											// package.
 					return true;
 				}
 			}
 		}
-		return false;// å¤??????????ï¼?è®©ç?¶ç±»è¿?è¡???¥æ?¶ä??ä¸?ï¿??
+		return false;// success, let's parent class deal with next
 	}
 
-//	private final static Logger logger = LoggerFactory.getLogger(TlvPackageDecoder.class);
+	private final static Logger logger = LoggerFactory.getLogger(TlvPackageDecoder.class);
 
 }

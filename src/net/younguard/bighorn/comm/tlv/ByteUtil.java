@@ -14,7 +14,7 @@ package net.younguard.bighorn.comm.tlv;
 public class ByteUtil
 {
 	public static final short SHORT_LENGTH = 2;
-	public static final short INT_LENGTH = 4;
+	public static final short INTEGER_LENGTH = 4;
 
 	/**
 	 * char to 1bytes=8bits
@@ -126,7 +126,7 @@ public class ByteUtil
 	 */
 	public static final byte[] int2Byte(int i)
 	{
-		byte[] dest = new byte[INT_LENGTH];
+		byte[] dest = new byte[INTEGER_LENGTH];
 		dest[3] = (byte) (i & 0xff);
 		dest[2] = (byte) ((i >>> 8) & 0xff);
 		dest[1] = (byte) ((i >>> 16) & 0xff);
@@ -177,7 +177,7 @@ public class ByteUtil
 	public static final int byte2Int(byte[] src, int offset)
 			throws IllegalArgumentException
 	{
-		if (src.length < offset + INT_LENGTH)
+		if (src.length < offset + INTEGER_LENGTH)
 			throw new IllegalArgumentException("Illegal byte length: " + src.length);
 
 		return ((src[offset] & 0xff) << 24) | ((src[offset + 1] & 0xff) << 16) | ((src[offset + 2] & 0xff) << 8)
@@ -273,7 +273,7 @@ public class ByteUtil
 	}
 
 	/**
-	 * ??¤æ??ä¸?ä¸?å­??????°ç??ä¸?ä¸?ä¸?å­?ç¬?ä¸²ç?????å®¹æ???????¸å??.
+	 * Compare to byte[] and a string equal or not.
 	 * 
 	 * @param b
 	 * @param s
@@ -297,7 +297,7 @@ public class ByteUtil
 	}
 
 	/**
-	 * ??¤æ??ä¸¤ä¸ªå­??????°ç????????å®¹æ???????¸å??.
+	 * Compare to byte[] and another byte[] equal or not.
 	 * 
 	 * @param a
 	 * @param b
@@ -320,7 +320,7 @@ public class ByteUtil
 	}
 
 	/**
-	 * ???å¹¶ä¸¤ä¸?å­??????°ç??.
+	 * merge b[] into a[]
 	 * 
 	 * @param a
 	 * @param b
@@ -349,7 +349,7 @@ public class ByteUtil
 	}
 
 	/**
-	 * å¤???¶å???????°ç??.
+	 * copy b[] to a[]
 	 * 
 	 * @param a
 	 * @param b
@@ -361,14 +361,14 @@ public class ByteUtil
 			throw new IllegalArgumentException("Can not copy bytes to null bytes.");
 
 		if (b != null)
-			// System.arrayCopy()??¹æ??ä¸??????¨å¾ª???å®???°ç??ï¼????åº?æ¯???¨å¾ª?????·è??è¦?å¿?å¾?å¤????
-			System.arraycopy(b, 0, a, offset, b.length);
+			// faster than copy one by one
+			System.arraycopy(b, 0, a, offset, b.length); 
 		// for (int i = offset, j = 0; j < b.length; i++, j++)
 		// a[i] = b[j];
 	}
 
 	/**
-	 * ??????å­??????°ç??.
+	 * get sub string from offset
 	 * 
 	 * @param b
 	 * @param offset
@@ -384,7 +384,7 @@ public class ByteUtil
 	}
 
 	/**
-	 * ??????å­??????°ç??.
+	 * get sub string from start index to end index
 	 * 
 	 * @param b
 	 * @param start

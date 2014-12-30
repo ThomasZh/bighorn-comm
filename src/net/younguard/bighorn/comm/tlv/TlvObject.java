@@ -6,14 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TLV: Tag/Length/Value
+ * TLV: Tag/Length/Value <li>bytes: |2---|4-----|Length------|</li> <li>
+ * eg.|1001|----12|012345678901|</li>
  * 
- * <li>|----|------|------------|<li/>
- * <li>|Tag-|Length|Value-------|<li/>
- * <li>|2---|4-----|Length------|<li/>
- * <li>|1001|----12|012345678901|<li/>
+ * Copyright 2014 by Young Guard Salon Community, China. All rights reserved.
+ * http://www.younguard.net
  * 
- * @author thomas.zhang
+ * NOTICE ! You can copy or redistribute this code freely, but you should not
+ * remove the information about the copyright notice and the author.
+ * 
+ * @author ThomasZhang, thomas.zh@qq.com
  */
 public class TlvObject
 		implements Serializable
@@ -26,9 +28,6 @@ public class TlvObject
 	public static final int TAG_LENGTH = 2;
 	public static final int HEADER_LENGTH = 6;
 	public static final int MAX_LENGTH = 65535;
-
-	// ////////////////////////////////////////////////////////
-	public static final int VERSION = 1;
 
 	// ////////////////////////////////////////////////////////
 
@@ -151,7 +150,7 @@ public class TlvObject
 	// ////////////////////////////////////////////////////////
 
 	/**
-	 * å­???¨å??TLVObject??????è¡?
+	 * store TLVObject children list
 	 */
 	private List<TlvObject> children = null;
 
@@ -185,7 +184,7 @@ public class TlvObject
 	}
 
 	/**
-	 * ?????¤ä??ä¸?TLVObject
+	 * remove a child
 	 * 
 	 * @param tlv
 	 */
@@ -198,7 +197,7 @@ public class TlvObject
 	}
 
 	/**
-	 * ???å¾?childrenä¸?å­?TLVObject???ä¸????
+	 * get children's number
 	 * 
 	 * @return n
 	 */
@@ -211,7 +210,7 @@ public class TlvObject
 	}
 
 	/**
-	 * ???å¾?childrenä¸?ç¬?iä¸?å­?TLVObject
+	 * get child by index
 	 * 
 	 * @param i
 	 *            (0,1,2,...n-1)
@@ -231,7 +230,7 @@ public class TlvObject
 	// ////////////////////////////////////////////////////////
 
 	/**
-	 * ???å½???½æ??,merge?????????ä¸?é«?
+	 * recursive algorithm, merge is not fast
 	 */
 	public byte[] toBytes()
 	{
@@ -258,7 +257,7 @@ public class TlvObject
 	}
 
 	/**
-	 * ???å½???½æ??,??¿å??newè¿?å¤????byte[]
+	 * recursive algorithm, new to much byte[]
 	 * 
 	 * @param b
 	 * @param offset

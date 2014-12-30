@@ -1,7 +1,7 @@
-package net.younguard.bighorn.broadcast.cmd;
+package net.younguard.bighorn.comm.util;
 
 /**
- * command define.
+ * Datetime util
  * 
  * Copyright 2014 by Young Guard Salon Community, China. All rights reserved.
  * http://www.younguard.net
@@ -11,9 +11,16 @@ package net.younguard.bighorn.broadcast.cmd;
  * 
  * @author ThomasZhang, thomas.zh@qq.com
  */
-public class CommandTag
+public class DatetimeUtil
 {
-	public static final short MESSAGE_PING_REQUEST = 1001;
-	public static final short MESSAGE_PANG_RESPONSE = 1002;
-	public static final short MESSAGE_PONG_RESPONSE = 1003;
+	public static int currentTimestamp()
+	{
+		return new Long(System.currentTimeMillis() / 1000).intValue();
+	}
+
+	public static int nextDayTimestamp()
+	{
+		return currentTimestamp() + 86400; // 24*3600
+	}
+
 }

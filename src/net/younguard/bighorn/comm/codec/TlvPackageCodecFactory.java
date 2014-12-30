@@ -5,6 +5,17 @@ import org.apache.mina.filter.codec.ProtocolCodecFactory;
 import org.apache.mina.filter.codec.ProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 
+/**
+ * mina tlv package encoder/decoder factory
+ * 
+ * Copyright 2014 by Young Guard Salon Community, China. All rights reserved.
+ * http://www.younguard.net
+ * 
+ * NOTICE ! You can copy or redistribute this code freely, but you should not
+ * remove the information about the copyright notice and the author.
+ * 
+ * @author ThomasZhang, thomas.zh@qq.com
+ */
 public class TlvPackageCodecFactory
 		implements ProtocolCodecFactory
 {

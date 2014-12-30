@@ -1,13 +1,18 @@
-package net.younguard.bighorn.comm;
+package net.younguard.bighorn.broadcast.cmd;
 
 import java.io.UnsupportedEncodingException;
 
+import net.younguard.bighorn.comm.Command;
+import net.younguard.bighorn.comm.RequestCommand;
 import net.younguard.bighorn.comm.tlv.ByteUtil;
 import net.younguard.bighorn.comm.tlv.TlvObject;
 import net.younguard.bighorn.comm.tlv.TlvParser;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * The mother object of response command
+ * client send a request message to server.
  * 
  * Copyright 2014 by Young Guard Salon Community, China. All rights reserved.
  * http://www.younguard.net
@@ -17,7 +22,7 @@ import net.younguard.bighorn.comm.tlv.TlvParser;
  * 
  * @author ThomasZhang, thomas.zh@qq.com
  */
-public abstract class ResponseCommand
+public class MsgPingReq
 		extends RequestCommand
 {
 	@Override
@@ -26,12 +31,14 @@ public abstract class ResponseCommand
 	{
 		int i = 0;
 		TlvObject tSequence = new TlvObject(i++, ByteUtil.INTEGER_LENGTH, ByteUtil.int2Byte(this.getSequence()));
-		TlvObject tRespState = new TlvObject(i++, ByteUtil.SHORT_LENGTH, ByteUtil.short2Byte(this.getRespState()));
+		TlvObject tContent = new TlvObject(i++, content);
 
 		TlvObject tlv = new TlvObject(this.getTag());
 		tlv.add(tSequence);
-		tlv.add(tRespState);
+		tlv.add(tContent);
 
+		logger.debug("from command to tlv package:(tag=" + this.getTag() + ", child=" + i + ", length="
+				+ tlv.getLength() + ")");
 		return tlv;
 	}
 
@@ -43,52 +50,53 @@ public abstract class ResponseCommand
 
 		int childCount = 2;
 		TlvParser.decodeChildren(tlv, childCount);
+		logger.debug("from tlv:(tag=" + this.getTag() + ", child=" + childCount + ") to command");
 
 		int i = 0;
 		TlvObject tSequence = tlv.getChild(i++);
 		this.setSequence(ByteUtil.byte2Int(tSequence.getValue()));
+		logger.debug("sequence: " + this.getSequence());
 
-		TlvObject tRespState = tlv.getChild(i++);
-		this.setRespState(ByteUtil.byte2Short(tRespState.getValue()));
+		TlvObject tContent = tlv.getChild(i++);
+		content = new String(tContent.getValue(), "UTF-8");
+		logger.debug("content: " + content);
 
 		return this;
 	}
 
 	// //////////////////////////////////////////////////////
 
-	public ResponseCommand()
+	public MsgPingReq()
 	{
+		this.setTag(CommandTag.MESSAGE_PING_REQUEST);
 	}
 
-	public ResponseCommand(short tag)
+	public MsgPingReq(int sequence)
 	{
-		this.setTag(tag);
-	}
-
-	public ResponseCommand(short tag, short sequence)
-	{
-		this(tag);
+		this();
 
 		this.setSequence(sequence);
 	}
 
-	public ResponseCommand(short tag, short sequence, short state)
+	public MsgPingReq(int sequence, String content)
 	{
-		this(tag, sequence);
+		this(sequence);
 
-		this.setRespState(state);
+		this.setContent(content);
 	}
 
-	private short respState;
+	private String content;
 
-	public short getRespState()
+	public String getContent()
 	{
-		return respState;
+		return content;
 	}
 
-	public void setRespState(short respState)
+	public void setContent(String content)
 	{
-		this.respState = respState;
+		this.content = content;
 	}
+
+	private final static Logger logger = LoggerFactory.getLogger(MsgPingReq.class);
 
 }

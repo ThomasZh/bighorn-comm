@@ -1,5 +1,8 @@
 package net.younguard.bighorn.comm.tlv;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TlvByteUtilPrinter
 {
 	private final static char[] HEX = "0123456789abcdef".toCharArray();
@@ -90,7 +93,7 @@ public class TlvByteUtilPrinter
 		sbTitle.append(" - HEXDUMP ");
 		sbTitle.append(size);
 		sbTitle.append(" bytes");
-		System.out.println(sbTitle.toString());
+		logger.debug(sbTitle.toString());
 
 		int i, j;
 		for (i = 0; i < size; i += 16) {
@@ -110,8 +113,10 @@ public class TlvByteUtilPrinter
 						ch = '.';
 					sb.append(ch);
 				}
-			System.out.println(sb.toString());
+			logger.debug(sb.toString());
 		}
 	}
+
+	private final static Logger logger = LoggerFactory.getLogger(TlvByteUtilPrinter.class);
 
 }

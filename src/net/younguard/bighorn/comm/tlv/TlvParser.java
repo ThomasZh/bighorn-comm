@@ -1,19 +1,20 @@
 package net.younguard.bighorn.comm.tlv;
 
 /**
- * ç®???????ASN.1???è®?è§£æ?????. VTLV: Version/Tag/Length/Value
- * <li>|-------|---|------|------------|</li>
- * <li>|Version|Tag|Length|Value-------|</li>
- * <li>|1------|1--|4-----|Length------|</li>
- * <li>|------1|-12|----12|012345678901|</li>
- * <li>|-------|---|------|------------|</li>
+ * Parser for tlv object
  * 
- * @author thomas.zhang
+ * Copyright 2014 by Young Guard Salon Community, China. All rights reserved.
+ * http://www.younguard.net
+ * 
+ * NOTICE ! You can copy or redistribute this code freely, but you should not
+ * remove the information about the copyright notice and the author.
+ * 
+ * @author ThomasZhang, thomas.zh@qq.com
  */
 public class TlvParser
 {
 	/**
-	 * ç¼????: TLVObject->byte[]
+	 * encode: TLVObject->byte[]
 	 * 
 	 * @param tlv
 	 * @return byte[]
@@ -27,7 +28,7 @@ public class TlvParser
 	// ///////////////////////////////////////////////////
 
 	/**
-	 * è§£ç??: byte[]->TLVObject
+	 * decode: byte[]->TLVObject
 	 * 
 	 * @param b
 	 * @return TlvObject
@@ -43,7 +44,7 @@ public class TlvParser
 	}
 
 	/**
-	 * è§£ç??: byte[]->TLVObject
+	 * decode: byte[]->TLVObject
 	 * 
 	 * @param b
 	 * @return TlvObject
@@ -58,11 +59,10 @@ public class TlvParser
 	}
 
 	/**
-	 * è§£ç??: TLVObject.body(byte[])->TLVObject
+	 * decode: TLVObject.body(byte[])->TLVObject
 	 * 
 	 * @param tlv
 	 * @param childCount
-	 *            childä¸????
 	 */
 	public static void decodeChildren(TlvObject tlv, int childCount)
 			throws IllegalArgumentException
@@ -84,7 +84,7 @@ public class TlvParser
 	}
 
 	/**
-	 * ???å¾?ç¬?iä¸?å­?TLVObjectå·?ä¾§æ?????TLVObject???å­?ç¬?ä¸²é?¿åº¦
+	 * get string length from begin to TLVObject[i]
 	 * 
 	 * @param tlv
 	 * @param i
@@ -96,7 +96,7 @@ public class TlvParser
 		for (int i = 0; i < index; i++) {
 			TlvObject child = tlv.getChild(i);
 			int length = child.getLength();
-			rs += TlvObject.HEADER_LENGTH + length;// 6ä¸?2ä½?Tag+4ä½?Length
+			rs += TlvObject.HEADER_LENGTH + length;
 		}
 		return rs;
 	}
