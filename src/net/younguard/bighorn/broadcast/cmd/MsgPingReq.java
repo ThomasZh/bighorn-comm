@@ -8,9 +8,6 @@ import net.younguard.bighorn.comm.tlv.ByteUtil;
 import net.younguard.bighorn.comm.tlv.TlvObject;
 import net.younguard.bighorn.comm.tlv.TlvParser;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * client send a request message to server.
  * 
@@ -37,8 +34,8 @@ public class MsgPingReq
 		tlv.add(tSequence);
 		tlv.add(tContent);
 
-		logger.debug("from command to tlv package:(tag=" + this.getTag() + ", child=" + i + ", length="
-				+ tlv.getLength() + ")");
+//		logger.debug("from command to tlv package:(tag=" + this.getTag() + ", child=" + i + ", length="
+//				+ tlv.getLength() + ")");
 		return tlv;
 	}
 
@@ -50,16 +47,16 @@ public class MsgPingReq
 
 		int childCount = 2;
 		TlvParser.decodeChildren(tlv, childCount);
-		logger.debug("from tlv:(tag=" + this.getTag() + ", child=" + childCount + ") to command");
+//		logger.debug("from tlv:(tag=" + this.getTag() + ", child=" + childCount + ") to command");
 
 		int i = 0;
 		TlvObject tSequence = tlv.getChild(i++);
 		this.setSequence(ByteUtil.byte2Int(tSequence.getValue()));
-		logger.debug("sequence: " + this.getSequence());
+//		logger.debug("sequence: " + this.getSequence());
 
 		TlvObject tContent = tlv.getChild(i++);
 		content = new String(tContent.getValue(), "UTF-8");
-		logger.debug("content: " + content);
+//		logger.debug("content: " + content);
 
 		return this;
 	}
@@ -97,6 +94,6 @@ public class MsgPingReq
 		this.content = content;
 	}
 
-	private final static Logger logger = LoggerFactory.getLogger(MsgPingReq.class);
+//	private final static Logger logger = LoggerFactory.getLogger(MsgPingReq.class);
 
 }

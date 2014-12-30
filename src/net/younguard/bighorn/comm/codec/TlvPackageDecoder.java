@@ -8,8 +8,6 @@ import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * mina tlv package decoder
@@ -40,20 +38,20 @@ public class TlvPackageDecoder
 
 			short tag = in.getShort();
 			int length = in.getInt();
-			logger.debug("from ioBuffer to tlv:(tag=" + tag + ", length=" + length + ")");
+//			logger.debug("from ioBuffer to tlv:(tag=" + tag + ", length=" + length + ")");
 
 			// unknown command tag
 			if (tag < 1000 || tag > 5100) {
-				String hexDump = in.getHexDump(200);
-				logger.warn("Not define tag:" + tag, hexDump);
+//				String hexDump = in.getHexDump(200);
+//				logger.warn("Not define tag:" + tag, hexDump);
 
 				throw new UnsupportedEncodingException("Not define tag:" + tag);
 			}
 
 			// unknown command length
 			if (length < 0 || length > 65535) {
-				String hexDump = in.getHexDump(200);
-				logger.warn("Package out of length:" + length, hexDump);
+//				String hexDump = in.getHexDump(200);
+//				logger.warn("Package out of length:" + length, hexDump);
 
 				throw new UnsupportedEncodingException("Package out of length:" + length);
 			}
@@ -83,6 +81,6 @@ public class TlvPackageDecoder
 		return false;// success, let's parent class deal with next
 	}
 
-	private final static Logger logger = LoggerFactory.getLogger(TlvPackageDecoder.class);
+//	private final static Logger logger = LoggerFactory.getLogger(TlvPackageDecoder.class);
 
 }
