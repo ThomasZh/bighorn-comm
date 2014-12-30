@@ -36,6 +36,10 @@ public class BroadcastCommandParser
 			return new MsgPangResp().decode(tlv);
 		case CommandTag.MESSAGE_PONG_RESPONSE:
 			return new MsgPongResp().decode(tlv);
+		case CommandTag.QUERY_ONLINE_NUMBER_REQUEST:
+			return new QueryOnlineNumReq().decode(tlv);
+		case CommandTag.QUERY_ONLINE_NUMBER_RESPONSE:
+			return new QueryOnlineNumResp().decode(tlv);
 		default:
 			throw new UnsupportedEncodingException("Unknown command=[" + tlv.getTag() + "]");
 		}

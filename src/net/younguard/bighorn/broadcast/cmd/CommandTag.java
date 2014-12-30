@@ -15,5 +15,7 @@ public class CommandTag
 {
 	public static final short MESSAGE_PING_REQUEST = 1001;
 	public static final short MESSAGE_PANG_RESPONSE = 1002;
-	public static final short MESSAGE_PONG_RESPONSE = 1003;
+	public static final short MESSAGE_PONG_RESPONSE = 1004;
+	public static final short QUERY_ONLINE_NUMBER_REQUEST = 1005;
+	public static final short QUERY_ONLINE_NUMBER_RESPONSE = 1006;
 }
