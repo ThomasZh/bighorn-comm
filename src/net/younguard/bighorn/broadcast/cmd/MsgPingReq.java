@@ -8,6 +8,9 @@ import net.younguard.bighorn.comm.tlv.ByteUtil;
 import net.younguard.bighorn.comm.tlv.TlvObject;
 import net.younguard.bighorn.comm.tlv.TlvParser;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * client send a request message to server.
  * 
@@ -28,14 +31,16 @@ public class MsgPingReq
 	{
 		int i = 0;
 		TlvObject tSequence = new TlvObject(i++, ByteUtil.INTEGER_LENGTH, ByteUtil.int2Byte(this.getSequence()));
+		TlvObject tUsername = new TlvObject(i++, username);
 		TlvObject tContent = new TlvObject(i++, content);
 
 		TlvObject tlv = new TlvObject(this.getTag());
 		tlv.add(tSequence);
+		tlv.add(tUsername);
 		tlv.add(tContent);
 
-//		logger.debug("from command to tlv package:(tag=" + this.getTag() + ", child=" + i + ", length="
-//				+ tlv.getLength() + ")");
+		logger.debug("from command to tlv package:(tag=" + this.getTag() + ", child=" + i + ", length="
+				+ tlv.getLength() + ")");
 		return tlv;
 	}
 
@@ -45,18 +50,22 @@ public class MsgPingReq
 	{
 		this.setTag(tlv.getTag());
 
-		int childCount = 2;
+		int childCount = 3;
 		TlvParser.decodeChildren(tlv, childCount);
-//		logger.debug("from tlv:(tag=" + this.getTag() + ", child=" + childCount + ") to command");
+		logger.debug("from tlv:(tag=" + this.getTag() + ", child=" + childCount + ") to command");
 
 		int i = 0;
 		TlvObject tSequence = tlv.getChild(i++);
 		this.setSequence(ByteUtil.byte2Int(tSequence.getValue()));
-//		logger.debug("sequence: " + this.getSequence());
+		logger.debug("sequence: " + this.getSequence());
+
+		TlvObject tUsername = tlv.getChild(i++);
+		username = new String(tUsername.getValue(), "UTF-8");
+		logger.debug("username: " + username);
 
 		TlvObject tContent = tlv.getChild(i++);
 		content = new String(tContent.getValue(), "UTF-8");
-//		logger.debug("content: " + content);
+		logger.debug("content: " + content);
 
 		return this;
 	}
@@ -75,13 +84,15 @@ public class MsgPingReq
 		this.setSequence(sequence);
 	}
 
-	public MsgPingReq(int sequence, String content)
+	public MsgPingReq(int sequence, String username, String content)
 	{
 		this(sequence);
 
+		this.setUsername(username);
 		this.setContent(content);
 	}
 
+	private String username;
 	private String content;
 
 	public String getContent()
@@ -94,6 +105,16 @@ public class MsgPingReq
 		this.content = content;
 	}
 
-//	private final static Logger logger = LoggerFactory.getLogger(MsgPingReq.class);
+	public String getUsername()
+	{
+		return username;
+	}
+
+	public void setUsername(String username)
+	{
+		this.username = username;
+	}
+
+	private final static Logger logger = LoggerFactory.getLogger(MsgPingReq.class);
 
 }
