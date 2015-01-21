@@ -18,4 +18,7 @@ public class CommandTag
 	public static final short MESSAGE_PONG_RESPONSE = 1004;
 	public static final short QUERY_ONLINE_NUMBER_REQUEST = 1005;
 	public static final short QUERY_ONLINE_NUMBER_RESPONSE = 1006;
+	public static final short REGISTER_NOTIFY_TOKEN_REQUEST = 1007;
+	public static final short REGISTER_NOTIFY_TOKEN_RESPONSE = 1008;
+	public static final short SOCKET_CLOSE_REQUEST = 1009;
 }

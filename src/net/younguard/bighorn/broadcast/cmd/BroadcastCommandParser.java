@@ -40,6 +40,12 @@ public class BroadcastCommandParser
 			return new QueryOnlineNumReq().decode(tlv);
 		case CommandTag.QUERY_ONLINE_NUMBER_RESPONSE:
 			return new QueryOnlineNumResp().decode(tlv);
+		case CommandTag.REGISTER_NOTIFY_TOKEN_REQUEST:
+			return new RegisterNotifyTokenReq().decode(tlv);
+		case CommandTag.REGISTER_NOTIFY_TOKEN_RESPONSE:
+			return new RegisterNotifyTokenResp().decode(tlv);
+		case CommandTag.SOCKET_CLOSE_REQUEST:
+			return new SocketCloseReq().decode(tlv);
 		default:
 			throw new UnsupportedEncodingException("Unknown command=[" + tlv.getTag() + "]");
 		}

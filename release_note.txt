@@ -1,4 +1,14 @@
 ======================================================================
+bighorn-comm-0.4.0											2015.1.21
+new feature:
+	1.add register notify token command
+	2.add socket close command before disconnect socket
+	3.device offline message send by jpush
+	
+fix bug:
+	1.query online num count error
+
+======================================================================
 bighorn-comm-0.3.1											2015.1.9
 new feature:
 	1.add username into ping/pong command
