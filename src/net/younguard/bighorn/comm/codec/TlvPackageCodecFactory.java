@@ -8,7 +8,7 @@ import org.apache.mina.filter.codec.ProtocolEncoder;
 /**
  * mina tlv package encoder/decoder factory
  * 
- * Copyright 2014 by Young Guard Salon Community, China. All rights reserved.
+ * Copyright 2014-2015 by Young Guard Salon Community, China. All rights reserved.
  * http://www.younguard.net
  * 
  * NOTICE ! You can copy or redistribute this code freely, but you should not
