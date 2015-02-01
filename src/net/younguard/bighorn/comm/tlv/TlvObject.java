@@ -236,23 +236,23 @@ public class TlvObject
 	{
 		byte[] header = new byte[HEADER_LENGTH];
 		// put tag
-		ByteUtil.short2Byte(header, 0, this.getTag());
+		TlvByteUtil.short2Byte(header, 0, this.getTag());
 		// put length from tag position
-		ByteUtil.int2Byte(header, TAG_LENGTH, this.getPayloadLength());
+		TlvByteUtil.int2Byte(header, TAG_LENGTH, this.getPayloadLength());
 
 		if (children == null) {
 			if (this.getValue() == null)
 				return header;
 			else
-				return ByteUtil.merge(header, this.getValue());
+				return TlvByteUtil.merge(header, this.getValue());
 		} else {
 			byte[] rs = null;
 			for (int i = 0; i < children.size(); i++) {
 				TlvObject tlv = (TlvObject) children.get(i);
-				rs = ByteUtil.merge(rs, tlv.toBytes());
+				rs = TlvByteUtil.merge(rs, tlv.toBytes());
 			}
 
-			return ByteUtil.merge(header, rs);
+			return TlvByteUtil.merge(header, rs);
 		}
 	}
 
@@ -265,11 +265,11 @@ public class TlvObject
 	 */
 	public byte[] toBytes(byte[] b, int offset)
 	{
-		ByteUtil.short2Byte(b, offset, this.getTag());
-		ByteUtil.int2Byte(b, offset + TAG_LENGTH, this.getPayloadLength());
+		TlvByteUtil.short2Byte(b, offset, this.getTag());
+		TlvByteUtil.int2Byte(b, offset + TAG_LENGTH, this.getPayloadLength());
 
 		if (children == null) {
-			ByteUtil.copy(b, this.getValue(), offset + HEADER_LENGTH);
+			TlvByteUtil.copy(b, this.getValue(), offset + HEADER_LENGTH);
 		} else {
 			int length = 0;
 			for (int i = 0; i < children.size(); i++) {

@@ -2,7 +2,7 @@ package net.younguard.bighorn.comm;
 
 import java.io.UnsupportedEncodingException;
 
-import net.younguard.bighorn.comm.tlv.ByteUtil;
+import net.younguard.bighorn.comm.tlv.TlvByteUtil;
 import net.younguard.bighorn.comm.tlv.TlvObject;
 import net.younguard.bighorn.comm.tlv.TlvParser;
 
@@ -27,7 +27,7 @@ public abstract class RequestCommand
 			throws UnsupportedEncodingException
 	{
 		int i = 0;
-		TlvObject tSequence = new TlvObject(i++, ByteUtil.INTEGER_LENGTH, ByteUtil.int2Byte(this.getSequence()));
+		TlvObject tSequence = new TlvObject(i++, TlvByteUtil.INTEGER_LENGTH, TlvByteUtil.int2Byte(this.getSequence()));
 
 		TlvObject tlv = new TlvObject(this.getTag());
 		tlv.add(tSequence);
@@ -45,7 +45,7 @@ public abstract class RequestCommand
 		TlvParser.decodeChildren(tlv, childCount);
 
 		TlvObject tSequence = tlv.getChild(0);
-		this.setSequence(ByteUtil.byte2Int(tSequence.getValue()));
+		this.setSequence(TlvByteUtil.byte2Int(tSequence.getValue()));
 
 		return this;
 	}

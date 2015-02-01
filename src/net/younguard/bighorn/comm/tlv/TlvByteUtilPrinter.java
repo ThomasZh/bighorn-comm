@@ -107,7 +107,7 @@ public class TlvByteUtilPrinter
 		int i, j;
 		for (i = 0; i < size; i += 16) {
 			StringBuffer sb = new StringBuffer();
-			sb.append(getHex(ByteUtil.int2Byte(i)) + "  ");
+			sb.append(getHex(TlvByteUtil.int2Byte(i)) + "  ");
 			for (j = 0; j < 16; j++)
 				if (i + j < size)
 					sb.append(getHex(buf[i + j]) + " ");

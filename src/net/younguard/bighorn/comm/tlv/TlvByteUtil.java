@@ -11,7 +11,7 @@ package net.younguard.bighorn.comm.tlv;
  * 
  * @author WonYoung Lee, javaservice@hanmail.net
  */
-public class ByteUtil
+public class TlvByteUtil
 {
 	public static final short SHORT_LENGTH = 2;
 	public static final short INTEGER_LENGTH = 4;

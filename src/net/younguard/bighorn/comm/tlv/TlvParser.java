@@ -37,8 +37,8 @@ public class TlvParser
 	{
 		TlvObject tlv = new TlvObject();
 
-		tlv.setTag(ByteUtil.byte2Short(b, 0));
-		tlv.setLength(ByteUtil.byte2Int(b, TlvObject.TAG_LENGTH));
+		tlv.setTag(TlvByteUtil.byte2Short(b, 0));
+		tlv.setLength(TlvByteUtil.byte2Int(b, TlvObject.TAG_LENGTH));
 
 		return tlv;
 	}
@@ -52,7 +52,7 @@ public class TlvParser
 	public static TlvObject decode(byte[] b)
 	{
 		TlvObject tlv = decodeHeader(b);
-		byte[] value = ByteUtil.sub(b, TlvObject.HEADER_LENGTH);
+		byte[] value = TlvByteUtil.sub(b, TlvObject.HEADER_LENGTH);
 		tlv.setValue(value);
 
 		return tlv;
@@ -69,14 +69,14 @@ public class TlvParser
 	{
 		for (int i = 0; i < childCount; i++) {
 			int leftLength = getLeftChildLenght(tlv, i);
-			byte[] s1 = ByteUtil.sub(tlv.getValue(), leftLength + TlvObject.TAG_LENGTH, leftLength
+			byte[] s1 = TlvByteUtil.sub(tlv.getValue(), leftLength + TlvObject.TAG_LENGTH, leftLength
 					+ TlvObject.HEADER_LENGTH);
 
-			int childLength = ByteUtil.byte2Int(s1, 0);
+			int childLength = TlvByteUtil.byte2Int(s1, 0);
 			if (childLength < 0 || childLength > tlv.getLength())
 				throw new IllegalArgumentException("Parse child[" + i + "] length(" + childLength + ") error.");
 
-			byte[] childStr = ByteUtil.sub(tlv.getValue(), leftLength, leftLength + TlvObject.HEADER_LENGTH
+			byte[] childStr = TlvByteUtil.sub(tlv.getValue(), leftLength, leftLength + TlvObject.HEADER_LENGTH
 					+ childLength);
 			TlvObject childTLV = TlvParser.decode(childStr);
 			tlv.add(childTLV);
