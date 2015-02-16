@@ -11,8 +11,8 @@ import org.apache.mina.core.session.IoSession;
 /**
  * The father object of request command
  * 
- * Copyright 2014-2015 by Young Guard Salon Community, China. All rights reserved.
- * http://www.younguard.net
+ * Copyright 2014-2015 by Young Guard Salon Community, China. All rights
+ * reserved. http://www.younguard.net
  * 
  * NOTICE ! You can copy or redistribute this code freely, but you should not
  * remove the information about the copyright notice and the author.
@@ -27,7 +27,7 @@ public abstract class RequestCommand
 			throws UnsupportedEncodingException
 	{
 		int i = 0;
-		TlvObject tSequence = new TlvObject(i++, TlvByteUtil.INTEGER_LENGTH, TlvByteUtil.int2Byte(this.getSequence()));
+		TlvObject tSequence = new TlvObject(i++, TlvByteUtil.int2Byte(this.getSequence()));
 
 		TlvObject tlv = new TlvObject(this.getTag());
 		tlv.add(tSequence);
@@ -36,7 +36,7 @@ public abstract class RequestCommand
 	}
 
 	@Override
-	public Command decode(TlvObject tlv)
+	public RequestCommand decode(TlvObject tlv)
 			throws UnsupportedEncodingException
 	{
 		this.setTag(tlv.getTag());
@@ -51,7 +51,7 @@ public abstract class RequestCommand
 	}
 
 	@Override
-	public Command execute(IoSession session)
+	public ResponseCommand execute(IoSession session)
 			throws Exception
 	{
 		return null;
