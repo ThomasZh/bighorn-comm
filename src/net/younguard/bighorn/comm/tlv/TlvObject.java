@@ -9,8 +9,8 @@ import java.util.List;
  * TLV: Tag/Length/Value <li>bytes: |2---|4-----|Length------|</li> <li>
  * eg.|1001|----12|012345678901|</li>
  * 
- * Copyright 2014-2015 by Young Guard Salon Community, China. All rights reserved.
- * http://www.younguard.net
+ * Copyright 2014-2015 by Young Guard Salon Community, China. All rights
+ * reserved. http://www.younguard.net
  * 
  * NOTICE ! You can copy or redistribute this code freely, but you should not
  * remove the information about the copyright notice and the author.
