@@ -41,7 +41,7 @@ public class TlvPackageDecoder
 //			logger.debug("from ioBuffer to tlv:(tag=" + tag + ", length=" + length + ")");
 
 			// unknown command tag
-			if (tag < 1000 || tag > 5100) {
+			if (tag < 20000 || tag > 22000) {
 //				String hexDump = in.getHexDump(200);
 //				logger.warn("Not define tag:" + tag, hexDump);
 
