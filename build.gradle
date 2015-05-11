@@ -57,6 +57,7 @@ dependencies {
     
 	//compile 'junit:junit:4.11'
 
+    compile 'commons-codec:commons-codec:1.9'
     compile 'org.apache.mina:mina-core:2.0.7'    
     
 }
